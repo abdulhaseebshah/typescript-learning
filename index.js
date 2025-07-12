@@ -1,24 +1,29 @@
 const menu = [
-  {
-    name: "Margherita",
-    price: 10,
-  },
-  {
-    name: "Napoli",
-    price: 8,
-  },
-  {
-    name: "Roman",
-    price: 9,
-  },
-  {
-    name: "Vesuvio",
-    price: 12,
-  },
+    {
+        id: 1,
+        name: "Margherita",
+        price: 10,
+    },
+    {
+        id: 2,
+        name: "Napoli",
+        price: 8,
+    },
+    {
+        id: 3,
+        name: "Roman",
+        price: 9,
+    },
+    {
+        id: 4,
+        name: "Vesuvio",
+        price: 12,
+    },
 ];
 
 let cashInRegister = 100;
 const orderQueue = [];
+let nextOrderId = 1;
 
 /**
  * Challenge: Add a utility function "addNewPizza" that takes a pizza object
@@ -26,11 +31,11 @@ const orderQueue = [];
  */
 
 function addNewPizza(pizzaName) {
-  menu.push(pizzaName);
-  return menu;
+    menu.push(pizzaName);
+    return menu;
 }
 
-addNewPizza({ name: "Caprese", price: 15 });
+addNewPizza({ id: 5, name: "Caprese", price: 15 });
 
 /**
  * Write another utility function, placeOrder, that takes a pizza name parameter and:
@@ -42,24 +47,48 @@ addNewPizza({ name: "Caprese", price: 15 });
  */
 
 function placeOrder(pizzaName) {
-  const orderItem = menu.find((item) => item.name === pizzaName);
+    const orderItem = menu.find((item) => item.name === pizzaName);
 
-  if (!orderItem) {
-    console.log("No Pizza Founds!");
-    return;
-  }
+    if (!orderItem) {
+        console.log("No Pizza Founds!");
+        return;
+    }
 
-  cashInRegister += orderItem.price;
+    cashInRegister += orderItem.price;
 
-  const order = {
-    pizza: orderItem,
-    status: "ordered",
-  };
+    const order = {
+        id: nextOrderId++,
+        pizza: orderItem,
+        status: "ordered",
+    };
 
-  orderQueue.push(order);
+    orderQueue.push(order);
 
-  return order;
+    return order;
 }
 
+placeOrder("Vesuvio");
+/**
+ * Challenge: write another utility function, completeOrder, that takes an orderId as a parameter
+ * finds the correct order in the orderQueue, and marks its status as "completed". For good measure,
+ * return the found order from the function.
+ *
+ * Note: you'll need to ensure that we're adding IDs to our orders when we create new orders. You can use a global `nextOrderId` variable and increment it every time a new order is created to simulate real IDs being managed for us by a database.
+ */
 
-console.log(placeOrder("Vesuvio"));
+function completeOrder(orderId) {
+    const findOrder = orderQueue.find((item) => item.id === orderId);
+
+    if (!findOrder) {
+        console.log("Order not found!");
+        return null;
+    }
+
+    findOrder.status = "completed";
+    return findOrder;
+}
+
+placeOrder("Vesuvio");
+placeOrder("Roman");
+console.log(completeOrder(1));
+console.log(orderQueue);
