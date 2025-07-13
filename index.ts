@@ -1,4 +1,4 @@
-type MenuType = { name: string; price: number };
+type MenuType = { id: number; name: string; price: number };
 
 type OrderType = {
   id: number;
@@ -7,10 +7,10 @@ type OrderType = {
 };
 
 const menu: MenuType[] = [
-  { name: "Margherita", price: 10 },
-  { name: "Napoli", price: 8 },
-  { name: "Roman", price: 9 },
-  { name: "Vesuvio", price: 12 },
+  { id: 1, name: "Margherita", price: 8 },
+  { id: 2, name: "Pepperoni", price: 10 },
+  { id: 3, name: "Hawaiian", price: 10 },
+  { id: 4, name: "Veggie", price: 9 },
 ];
 
 let cashInRegister: number = 100;
@@ -22,7 +22,7 @@ function addNewPizza(pizza: MenuType): MenuType[] {
   return menu;
 }
 
-addNewPizza({ name: "Caprese", price: 15 });
+addNewPizza({ id: 5, name: "Caprese", price: 15 });
 
 function placeOrder(pizzaName: string) {
   const orderItem = menu.find((item) => item.name === pizzaName);
@@ -48,6 +48,27 @@ function completeOrder(orderId: number): OrderType | null {
   }
   findOrder.status = "completed";
   return findOrder;
+}
+
+/**
+ * Challenge: create a new utility function called getPizzaDetail. It will take
+ * a parameter called `identifier`, but there's a twist: we want this identifier
+ * to be allowed to either be the string name of the pizza (e.g. "Pepperoni"),
+ * OR to be the number ID of the pizza (e.g. 2).
+ *
+ * Don't worry about the code inside the function yet, just create the function
+ * signature, making sure to teach TS that the `identifier` parameter is allowed
+ * to either be a string or a number.
+ */
+
+function getPizzaDetail(identifier: string | number) {
+  if (typeof identifier === "string") {
+    return menu.find(
+      (pizza) => pizza.name.toLowerCase() === identifier.toLowerCase()
+    );
+  } else {
+    return menu.find((pizza) => pizza.id === identifier);
+  }
 }
 
 placeOrder("Vesuvio");
